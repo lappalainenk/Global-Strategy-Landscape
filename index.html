@@ -9,81 +9,95 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --navy:#1a2b45;--navy2:#243550;--teal:#1d7a6b;--teal-light:#e4f4f1;
-  --slate:#f0f2f5;--border:#dde2ea;--muted:#8a96aa;--text:#1a2b45;
-  --white:#fff;
-  --r0-bg:#e8ecf2;--r0-bd:#1a2b45;--r0-tx:#1a2b45;
-  --r1-bg:#eef5e9;--r1-bd:#5c8a3c;--r1-tx:#3a5c25;
-  --r2-bg:#e8f2f9;--r2-bd:#2a6fa8;--r2-tx:#1a4f7a;
-  --r3-bg:#f3edf8;--r3-bd:#7b4ea0;--r3-tx:#5a3478;
-  --r4-bg:#fdf5e8;--r4-bd:#c8922a;--r4-tx:#8a6010;
-  --r5-bg:#fbeeed;--r5-bd:#c0453a;--r5-tx:#8a2d24;
-  --r6-bg:#e8f3f5;--r6-bd:#3d7d8f;--r6-tx:#255a6a;
-  --r7-bg:#f0f8e8;--r7-bd:#4a8c2a;--r7-tx:#2e5c18;
-  --r8-bg:#fff3e8;--r8-bd:#d4701a;--r8-tx:#8a4510;
-  --r9-bg:#f5e8f8;--r9-bd:#9b3ab5;--r9-tx:#6a2080;
+  --slate:#f0f2f5;--border:#dde2ea;--muted:#8a96aa;--text:#1a2b45;--white:#fff;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--slate);color:var(--text);min-height:100vh;overflow-x:hidden}
 
-/* ─── HEADER ─── */
-.site-header{background:var(--navy);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,0.18)}
+/* HEADER */
+.site-header{background:var(--navy);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,0.18)}
 .header-brand{display:flex;flex-direction:column;gap:2px}
-.header-org{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);opacity:.9}
-.header-title{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.5vw,1.55rem);color:#fff;line-height:1.1}
+.header-org{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
+.header-title{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.5rem);color:#fff;line-height:1.1}
 .header-title span{color:#7ecfc0}
-.header-meta{display:flex;align-items:center;gap:10px}
-.badge{background:rgba(255,255,255,0.12);color:#fff;font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;letter-spacing:.04em;border:1px solid rgba(255,255,255,0.15)}
-.hint-text{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:.02em}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,0.12);color:#fff;font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.15)}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#6b7891;flex-shrink:0;transition:background .3s}
+.sync-dot.live{background:#4caf7d;box-shadow:0 0 0 2px rgba(76,175,125,0.25)}
+.sync-dot.saving{background:#c8922a;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sync-label{font-size:11px;color:rgba(255,255,255,0.4)}
+.hint-text{font-size:11px;color:rgba(255,255,255,0.3)}
 
-/* ─── LAYOUT ─── */
+/* LOADING SCREEN */
+#loading-screen{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px;transition:opacity .4s}
+#loading-screen.fade{opacity:0;pointer-events:none}
+.loading-logo{font-family:'Playfair Display',serif;font-size:1.6rem;color:#fff}
+.loading-logo span{color:#7ecfc0}
+.loading-bar{width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden}
+.loading-bar-fill{height:100%;background:var(--teal);border-radius:99px;animation:loadbar 1.4s ease infinite}
+@keyframes loadbar{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
+.loading-sub{font-size:12px;color:rgba(255,255,255,0.35)}
+
+/* SETUP SCREEN */
+#setup-screen{position:fixed;inset:0;background:rgba(10,18,35,0.6);display:none;align-items:center;justify-content:center;z-index:8000;padding:16px}
+#setup-screen.show{display:flex}
+.setup-card{background:#fff;border-radius:16px;padding:32px 36px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:pop .2s ease}
+.setup-card h2{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:6px}
+.setup-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:24px}
+.setup-step{margin-bottom:16px}
+.setup-step label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.setup-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;font-family:inherit;outline:none;color:var(--navy);transition:border-color .15s}
+.setup-input:focus{border-color:var(--teal)}
+.setup-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:8px;transition:background .15s}
+.setup-btn:hover{background:var(--navy2)}
+.setup-note{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5;text-align:center}
+.setup-note a{color:var(--teal);text-decoration:none}
+.setup-divider{text-align:center;color:var(--muted);font-size:12px;margin:16px 0;position:relative}
+.setup-divider::before,.setup-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
+.setup-divider::before{left:0}.setup-divider::after{right:0}
+
+/* LAYOUT */
 .page{max-width:1440px;margin:0 auto;padding:24px 20px 60px}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500}
 .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ─── BOARD WRAPPER ─── */
+/* BOARD */
 .board-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);background:var(--white);box-shadow:0 2px 24px rgba(26,43,69,0.09);margin-bottom:24px}
 table{width:100%;border-collapse:collapse;min-width:860px;table-layout:fixed}
-
-/* ─── THEAD ─── */
 thead tr th{padding:12px 13px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap;position:relative}
 th.th-cat{background:var(--navy);color:#fff;width:140px}
-th.th-reg{border-left:3px solid var(--r0-bd)}
-td.td-reg{word-break:break-word}
+th.th-reg{border-left:3px solid}
 th.add-reg-th{background:#f7f9fc;border-left:1px dashed var(--border);border-bottom:2px solid var(--border);padding:10px 12px;width:140px}
-
-/* ─── TBODY ─── */
 tbody tr{transition:background .12s}
 tbody tr:nth-child(even) td:not(.td-cat){background:#fafbfc}
 td{padding:9px 10px;border-bottom:1px solid #ebeef3;vertical-align:top}
 td.td-cat{background:var(--navy);color:#fff;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;line-height:1.4;border-bottom:1px solid rgba(255,255,255,0.08);position:relative;min-width:140px;width:140px}
-td.td-reg{border-left:3px solid;cursor:text}
+td.td-reg{border-left:3px solid;cursor:text;word-break:break-word}
 td.td-spacer{border-left:1px dashed #eaedf2;background:#f7f9fc!important}
 
-/* ─── TAGS ─── */
+/* TAGS */
 .tag{display:flex;align-items:flex-start;gap:3px;border-left:3px solid;border-radius:5px;padding:3px 4px 3px 7px;margin-bottom:4px;font-size:12px;line-height:1.4;cursor:grab;transition:filter .12s,box-shadow .12s,opacity .15s;position:relative;user-select:none}
 .tag:hover{filter:brightness(.97);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 .tag.dragging{opacity:.3;cursor:grabbing;box-shadow:none}
 .tag-text{flex:1;word-break:break-word}
 .tag-actions{display:flex;align-items:center;gap:2px;flex-shrink:0;opacity:0;transition:opacity .12s}
 .tag:hover .tag-actions{opacity:1}
-.tag-comment-btn,.tag-del-btn{background:none;border:none;cursor:pointer;font-size:13px;line-height:1;padding:1px 3px;border-radius:3px;transition:background .12s}
+.tag-comment-btn,.tag-del-btn{background:none;border:none;cursor:pointer;font-size:13px;line-height:1;padding:1px 3px;border-radius:3px}
 .tag-comment-indicator{font-size:10px;background:rgba(0,0,0,0.08);border-radius:10px;padding:1px 5px;margin-right:2px;font-weight:500;white-space:nowrap}
-/* drag-over highlight */
-.td-reg.drag-over{outline:2.5px dashed #1d7a6b;outline-offset:-3px;background:#e4f4f1!important}
-#drag-ghost{position:fixed;pointer-events:none;z-index:9999;background:#e8ecf2;border-left:3px solid #1a2b45;border-radius:5px;padding:4px 10px 4px 9px;font-size:12px;font-family:'DM Sans',sans-serif;color:#1a2b45;box-shadow:0 6px 20px rgba(0,0,0,0.18);max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.92}
+.td-reg.drag-over{outline:2.5px dashed #1d7a6b!important;outline-offset:-3px;background:#e4f4f1!important}
+#drag-ghost{position:fixed;pointer-events:none;z-index:9999;border-left:3px solid #1a2b45;border-radius:5px;padding:4px 10px 4px 9px;font-size:12px;font-family:'DM Sans',sans-serif;box-shadow:0 6px 20px rgba(0,0,0,0.2);max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.92;top:0;left:0}
 
-/* ─── INLINE INPUT ─── */
+/* INLINE INPUT */
 .inline-input{display:block;width:100%;border:1.5px solid;border-radius:5px;padding:4px 8px;font-size:12px;font-family:inherit;outline:none;transition:box-shadow .15s}
 .inline-input:focus{box-shadow:0 0 0 2px rgba(29,122,107,0.2)}
 .add-hint{font-size:11px;color:#c5ccd8;padding:3px 2px;opacity:0;transition:opacity .15s;user-select:none}
 td:hover .add-hint{opacity:1}
 
-/* ─── ADD BUTTONS ─── */
+/* ADD/DEL BUTTONS */
 .add-row-btn,.add-col-btn{display:flex;align-items:center;gap:5px;background:none;border:1.5px dashed #c5ccd8;border-radius:7px;padding:5px 11px;cursor:pointer;font-size:11px;color:#9ba8be;font-family:inherit;white-space:nowrap;transition:all .15s}
 .add-row-btn:hover,.add-col-btn:hover{border-color:var(--teal);color:var(--teal)}
 .add-row-td{background:#f7f9fc!important;border-bottom:none!important}
-
-/* ─── DEL BUTTONS ─── */
 .del-reg-btn{position:absolute;top:50%;right:6px;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;opacity:0;transition:opacity .15s;padding:2px 4px;border-radius:3px;line-height:1}
 th:hover .del-reg-btn{opacity:.5}
 th:hover .del-reg-btn:hover{opacity:1}
@@ -91,7 +105,7 @@ th:hover .del-reg-btn:hover{opacity:1}
 td.td-cat:hover .del-cat-btn{opacity:1}
 td.td-cat:hover .del-cat-btn:hover{color:#fff}
 
-/* ─── COMMITMENTS ─── */
+/* COMMITMENTS */
 .commitments{background:var(--navy);border-radius:12px;padding:28px 30px;color:#fff}
 .commit-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;margin-bottom:8px}
 .commit-sub{font-size:12px;color:rgba(255,255,255,0.45);font-style:italic;margin-bottom:18px;max-width:600px;line-height:1.6}
@@ -100,7 +114,7 @@ td.td-cat:hover .del-cat-btn:hover{color:#fff}
 .commit-card-title{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7ecfc0;margin-bottom:4px}
 .commit-card-body{font-size:12px;color:rgba(255,255,255,0.72);line-height:1.6}
 
-/* ─── COMMENTS DRAWER ─── */
+/* COMMENTS DRAWER */
 .drawer-overlay{position:fixed;inset:0;background:rgba(10,18,35,0);pointer-events:none;z-index:300;transition:background .25s}
 .drawer-overlay.open{background:rgba(10,18,35,0.4);pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;height:100vh;width:360px;max-width:95vw;background:#fff;box-shadow:-4px 0 32px rgba(0,0,0,0.14);z-index:301;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
@@ -109,13 +123,12 @@ td.td-cat:hover .del-cat-btn:hover{color:#fff}
 .drawer-tag-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
 .drawer-tag-name{font-size:15px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:4px}
 .drawer-context{font-size:11px;color:var(--muted)}
-.drawer-close{position:absolute;top:14px;right:14px;background:#f0f2f5;border:none;border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:background .12s}
-.drawer-close:hover{background:#e2e6ed}
+.drawer-close{position:absolute;top:14px;right:14px;background:#f0f2f5;border:none;border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center}
 .drawer-body{flex:1;overflow-y:auto;padding:16px 20px}
 .no-comments{text-align:center;color:var(--muted);font-size:13px;padding:40px 0;font-style:italic}
 .comment-item{display:flex;gap:10px;margin-bottom:16px;animation:cmtIn .2s ease}
 @keyframes cmtIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.comment-avatar{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.comment-avatar{width:30px;height:30px;border-radius:50%;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .comment-bubble{flex:1;background:#f5f7fa;border-radius:0 8px 8px 8px;padding:9px 12px;position:relative}
 .comment-meta{display:flex;align-items:baseline;gap:6px;margin-bottom:4px}
 .comment-author{font-size:12px;font-weight:600;color:var(--navy)}
@@ -125,16 +138,14 @@ td.td-cat:hover .del-cat-btn:hover{color:#fff}
 .comment-bubble:hover .comment-del{opacity:1}
 .comment-del:hover{color:#c0453a}
 .drawer-footer{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
-.drawer-footer-top{display:flex;gap:8px;margin-bottom:8px}
-.author-input{flex:1;border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;color:var(--navy);transition:border-color .15s}
+.author-input{width:100%;border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;color:var(--navy);margin-bottom:8px;transition:border-color .15s}
 .author-input:focus{border-color:var(--teal)}
 .comment-textarea{width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;font-family:inherit;outline:none;resize:none;color:var(--navy);line-height:1.5;transition:border-color .15s}
 .comment-textarea:focus{border-color:var(--teal)}
 .comment-submit{width:100%;margin-top:8px;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:9px;font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;transition:background .15s}
 .comment-submit:hover{background:var(--navy2)}
-.comment-submit:disabled{opacity:.45;cursor:default}
 
-/* ─── CONFIRM MODAL ─── */
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(10,18,35,0.5);display:flex;align-items:center;justify-content:center;z-index:500;padding:16px}
 .modal{background:#fff;border-radius:12px;padding:24px 28px;max-width:360px;width:100%;box-shadow:0 16px 48px rgba(0,0,0,0.18);animation:pop .16s ease}
 @keyframes pop{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
@@ -144,36 +155,65 @@ td.td-cat:hover .del-cat-btn:hover{color:#fff}
 .btn-cancel{padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:13px;font-family:inherit}
 .btn-danger{padding:7px 16px;border-radius:8px;border:none;background:#c0453a;color:#fff;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit}
 
-/* ─── TOAST ─── */
-.toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;font-size:13px;font-weight:500;padding:9px 16px;border-radius:8px;z-index:600;animation:toastIn .18s ease;font-family:inherit;box-shadow:0 4px 18px rgba(0,0,0,0.2)}
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;font-size:13px;font-weight:500;padding:9px 16px;border-radius:8px;z-index:600;animation:toastIn .18s ease;box-shadow:0 4px 18px rgba(0,0,0,0.2)}
 @keyframes toastIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
 
 ::-webkit-scrollbar{height:5px;width:5px}
 ::-webkit-scrollbar-thumb{background:#c5ccd8;border-radius:9px}
-
-/* ─── DRAG & DROP ─── */
-.td-reg.drag-over{outline:2.5px dashed #1d7a6b !important;outline-offset:-3px;background:#e4f4f1 !important}
-#drag-ghost{position:fixed;pointer-events:none;z-index:9999;border-left:3px solid #1a2b45;border-radius:5px;padding:4px 10px 4px 9px;font-size:12px;font-family:'DM Sans',sans-serif;box-shadow:0 6px 20px rgba(0,0,0,0.2);max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.92;top:0;left:0}
 </style>
 </head>
 <body>
+
+<!-- Loading -->
+<div id="loading-screen">
+  <div class="loading-logo">Global Strategy <span>Landscape</span></div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+  <div class="loading-sub">Connecting to shared board…</div>
+</div>
+
+<!-- Setup (first-time Firebase config) -->
+<div id="setup-screen">
+  <div class="setup-card">
+    <h2>Connect Your Board</h2>
+    <p>To share this board with your team in real time, paste your Firebase config below. It takes about 2 minutes to set up — <a href="https://console.firebase.google.com/" target="_blank">open Firebase Console</a>, create a project, add a web app, and copy the config.</p>
+    <div class="setup-step">
+      <label>Firebase Config JSON</label>
+      <textarea class="setup-input" id="firebase-config-input" rows="7" placeholder='{
+  "apiKey": "...",
+  "authDomain": "...",
+  "projectId": "...",
+  "storageBucket": "...",
+  "messagingSenderId": "...",
+  "appId": "..."
+}'></textarea>
+    </div>
+    <button class="setup-btn" id="setup-save-btn">Save & Connect</button>
+    <div class="setup-divider">or</div>
+    <button class="setup-btn" style="background:#f0f2f5;color:var(--navy)" id="setup-local-btn">Use locally (no sharing)</button>
+    <p class="setup-note">Your config is saved only in this browser. <a href="https://firebase.google.com/docs/firestore/quickstart" target="_blank">Firestore setup guide →</a></p>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="header-brand">
     <span class="header-org">The Beryl Institute</span>
     <div class="header-title">Global Strategy <span>Landscape</span></div>
   </div>
-  <div class="header-meta">
-    <span class="hint-text">Click item to comment · Click cell to add · Auto-saves</span>
+  <div class="header-right">
+    <span class="hint-text">Click item to comment · drag to move · click cell to add</span>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span class="sync-label" id="sync-label">Connecting…</span>
+    </div>
     <span class="badge">2026</span>
+    <button onclick="showSetup()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;font-size:11px;font-family:inherit">⚙ Settings</button>
   </div>
 </header>
 
 <div class="page">
   <div class="legend" id="legend"></div>
-  <div class="board-wrap">
-    <table id="board-table"></table>
-  </div>
+  <div class="board-wrap"><table id="board-table"></table></div>
   <div class="commitments">
     <div class="commit-title">Our Global Commitments</div>
     <p class="commit-sub">The Beryl Institute is the global community of healthcare professionals and experience champions committed to transforming the human experience in healthcare.</p>
@@ -194,14 +234,12 @@ td.td-cat:hover .del-cat-btn:hover{color:#fff}
     <button class="drawer-close" id="drawer-close">×</button>
     <div class="drawer-tag-label" id="drawer-label"></div>
     <div class="drawer-tag-name" id="drawer-tag-name"></div>
-    <div class="drawer-context" id="drawer-context"></div>
+    <div class="drawer-context">Comments</div>
   </div>
   <div class="drawer-body" id="drawer-body"></div>
   <div class="drawer-footer">
-    <div class="drawer-footer-top">
-      <input class="author-input" id="author-input" placeholder="Your name" maxlength="40"/>
-    </div>
-    <textarea class="comment-textarea" id="comment-textarea" rows="2" placeholder="Add a comment…"></textarea>
+    <input class="author-input" id="author-input" placeholder="Your name" maxlength="40"/>
+    <textarea class="comment-textarea" id="comment-textarea" rows="2" placeholder="Add a comment… (Ctrl+Enter to post)"></textarea>
     <button class="comment-submit" id="comment-submit">Post Comment</button>
   </div>
 </div>
@@ -220,28 +258,30 @@ td.td-cat:hover .del-cat-btn:hover{color:#fff}
 
 <div class="toast" id="toast" style="display:none"></div>
 
-<script>
-// ─── PALETTE ───
-const PALETTE = [
-  {bg:'#e8ecf2',bd:'#1a2b45',tx:'#1a2b45'},
-  {bg:'#eef5e9',bd:'#5c8a3c',tx:'#3a5c25'},
-  {bg:'#e8f2f9',bd:'#2a6fa8',tx:'#1a4f7a'},
-  {bg:'#f3edf8',bd:'#7b4ea0',tx:'#5a3478'},
-  {bg:'#fdf5e8',bd:'#c8922a',tx:'#8a6010'},
-  {bg:'#fbeeed',bd:'#c0453a',tx:'#8a2d24'},
-  {bg:'#e8f3f5',bd:'#3d7d8f',tx:'#255a6a'},
-  {bg:'#f0f8e8',bd:'#4a8c2a',tx:'#2e5c18'},
-  {bg:'#fff3e8',bd:'#d4701a',tx:'#8a4510'},
-  {bg:'#f5e8f8',bd:'#9b3ab5',tx:'#6a2080'},
-];
-const pc = (i) => PALETTE[i % PALETTE.length];
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, onSnapshot, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ─── STATE ───
-const KEY = 'beryl-webpage-v1';
-let state = {
-  regions: ['All','Africa','APAC','Europe','LATAM','MENA','North Am'],
-  categories: ['Community / Connection','Content / Research','Education / Development','Partnerships / Collaboration','Events','PXE','New Inquiries'],
-  data: {
+// ── PALETTE ──
+const PALETTE = [
+  {bg:'#e8ecf2',bd:'#1a2b45',tx:'#1a2b45'},{bg:'#eef5e9',bd:'#5c8a3c',tx:'#3a5c25'},
+  {bg:'#e8f2f9',bd:'#2a6fa8',tx:'#1a4f7a'},{bg:'#f3edf8',bd:'#7b4ea0',tx:'#5a3478'},
+  {bg:'#fdf5e8',bd:'#c8922a',tx:'#8a6010'},{bg:'#fbeeed',bd:'#c0453a',tx:'#8a2d24'},
+  {bg:'#e8f3f5',bd:'#3d7d8f',tx:'#255a6a'},{bg:'#f0f8e8',bd:'#4a8c2a',tx:'#2e5c18'},
+  {bg:'#fff3e8',bd:'#d4701a',tx:'#8a4510'},{bg:'#f5e8f8',bd:'#9b3ab5',tx:'#6a2080'},
+];
+const pc = i => PALETTE[i % PALETTE.length];
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const avatarColors = ['#1a2b45','#1d7a6b','#5c8a3c','#2a6fa8','#7b4ea0','#c8922a','#3d7d8f','#c0453a'];
+const avatarColor = n => { let h=0; for(let c of(n||''))h=(h*31+c.charCodeAt(0))&0xffff; return avatarColors[h%8]; };
+const initials = n => n ? n.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('') : '?';
+
+// ── INITIAL DATA ──
+const INIT = {
+  regions:['All','Africa','APAC','Europe','LATAM','MENA','North Am'],
+  categories:['Community / Connection','Content / Research','Education / Development','Partnerships / Collaboration','Events','PXE','New Inquiries'],
+  data:{
     'Community / Connection':{'All':['Global Ambassador Network','Global Exp Collab / Adv Group','Revisit LMIC Member Modeling'],'APAC':['AUST/OCEANA Regional Collab (AM)'],'Europe':['European HX Inst','Affiliate IFEP IEXP PX Latvia','SPX – TBD'],'LATAM':['SOBREXP'],'MENA':['MENA Adv Board','Sidra Board']},
     'Content / Research':{'All':['PXJ','Global Experience Measure','HX100 (TBD)','State of HX 2027','WMTY Podcast Series'],'APAC':['Podcast – Lai Yee'],'MENA':['AHF Gold Certificate','PX Benchmarking']},
     'Education / Development':{'All':['Global Expansion of CPXP Credential','C4HX Education Collaborative'],'APAC':['MENA PX / CPXP Course'],'Europe':['HSJD Program'],'LATAM':['HSL Post Grad','CONECTA XP Certification Course'],'MENA':['AHF Learning Academy','SSMC Learning Collaborative Planning','CXSA – MENA','CPXP Prep Program – Ahmed A. Abdelkawy','Potential Collabs Dr. Nida Muathirun']},
@@ -250,453 +290,344 @@ let state = {
     'PXE':{'MENA':['CAPP-KSA – Sanaa Al-Shawafi','Excellence Field – Mohanad Hassn ElSheikh','King Saud Univ Medical City – Turki Alahmari','T4Q – Tariq Alotaibi','Virtual Medical Academy – Sarah Mohsen Al-Amodi']},
     'New Inquiries':{'Africa':['Kabeya (DRC)'],'APAC':['Oriental Melaka Straits Medical Centre (Malaysia)','Peter MacCallum Cancer Centre'],'Europe':['Atika Alami (France)'],'LATAM':['Gerência Geral de Humanização e Experiência do Paciente'],'MENA':['Star (Kingdom of Saudi Arabia)','SEHA (Abu Dhabi Health Services Company)']},
   },
-  comments: {} // key: "cat|||reg|||itemIdx" => [{id,author,text,time}]
+  comments:{}
 };
 
-function load() {
+const LOCAL_KEY = 'beryl-local-v2';
+const FB_KEY    = 'beryl-firebase-config';
+const DOC_PATH  = 'boards/global-strategy-2026';
+
+let state = JSON.parse(JSON.stringify(INIT));
+let db = null;
+let unsubscribe = null;
+let remoteWrite = false; // flag: we just wrote, ignore next snapshot
+let saveTimer = null;
+
+// ── SYNC STATUS ──
+const syncDot   = document.getElementById('sync-dot');
+const syncLabel = document.getElementById('sync-label');
+function setSync(mode) {
+  syncDot.className = 'sync-dot' + (mode==='live'?' live':mode==='saving'?' saving':'');
+  syncLabel.textContent = mode==='live'?'Live – shared':mode==='saving'?'Saving…':mode==='local'?'Local only':'Offline';
+}
+
+// ── TOAST ──
+let toastTimer2;
+function toast(msg){ const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(toastTimer2);toastTimer2=setTimeout(()=>el.style.display='none',2000); }
+
+// ── CONFIRM ──
+let confirmCb=null;
+function confirmDlg(title,body,cb){ document.getElementById('modal-title').textContent=title;document.getElementById('modal-body').textContent=body;document.getElementById('modal-overlay').style.display='flex';confirmCb=cb; }
+document.getElementById('modal-cancel').onclick=()=>{document.getElementById('modal-overlay').style.display='none';confirmCb=null;};
+document.getElementById('modal-confirm').onclick=()=>{document.getElementById('modal-overlay').style.display='none';if(confirmCb){confirmCb();confirmCb=null;}};
+
+// ── SAVE ──
+function saveLocal(){ try{localStorage.setItem(LOCAL_KEY,JSON.stringify(state));}catch{} }
+
+async function saveRemote(){
+  if(!db) return;
+  setSync('saving');
   try {
-    const s = localStorage.getItem(KEY);
-    if (s) state = JSON.parse(s);
-  } catch {}
-}
-function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
-}
-load();
-
-// ─── TOAST ───
-let toastTimer;
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.style.display = 'block';
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.style.display = 'none', 1800);
+    remoteWrite = true;
+    await setDoc(doc(db, ...DOC_PATH.split('/')), state);
+    setSync('live');
+  } catch(e) {
+    remoteWrite = false;
+    toast('⚠ Cloud save failed — saved locally');
+    setSync('local');
+  }
 }
 
-// ─── CONFIRM MODAL ───
-let confirmCb = null;
-function confirm(title, body, cb) {
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-body').textContent = body;
-  document.getElementById('modal-overlay').style.display = 'flex';
-  confirmCb = cb;
+function save(){
+  saveLocal();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveRemote, 600);
 }
-document.getElementById('modal-cancel').onclick = () => { document.getElementById('modal-overlay').style.display = 'none'; confirmCb = null; };
-document.getElementById('modal-confirm').onclick = () => { document.getElementById('modal-overlay').style.display = 'none'; if (confirmCb) { confirmCb(); confirmCb = null; } };
 
-// ─── COMMENTS DRAWER ───
+// ── FIREBASE SETUP ──
+async function connectFirebase(config) {
+  try {
+    const app = initializeApp(config);
+    db = getFirestore(app);
+    // Try to read doc
+    const snap = await getDoc(doc(db, ...DOC_PATH.split('/')));
+    if (snap.exists()) {
+      state = snap.data();
+    } else {
+      // First time: push initial data
+      await setDoc(doc(db, ...DOC_PATH.split('/')), state);
+    }
+    // Live listener
+    if (unsubscribe) unsubscribe();
+    unsubscribe = onSnapshot(doc(db, ...DOC_PATH.split('/')), (snap) => {
+      if (remoteWrite) { remoteWrite = false; return; }
+      if (snap.exists()) { state = snap.data(); renderBoard(); }
+    });
+    setSync('live');
+    return true;
+  } catch(e) {
+    console.error(e);
+    return false;
+  }
+}
+
+// ── SETUP SCREEN ──
+window.showSetup = () => document.getElementById('setup-screen').classList.add('show');
+function hideSetup() { document.getElementById('setup-screen').classList.remove('show'); }
+
+document.getElementById('setup-save-btn').onclick = async () => {
+  const raw = document.getElementById('firebase-config-input').value.trim();
+  try {
+    const config = JSON.parse(raw);
+    const ok = await connectFirebase(config);
+    if (ok) {
+      localStorage.setItem(FB_KEY, JSON.stringify(config));
+      hideSetup(); renderBoard(); toast('🟢 Connected! Share this file via Netlify Drop or GitHub Pages.');
+    } else {
+      alert('Could not connect — check your config and make sure Firestore is enabled in your Firebase project.');
+    }
+  } catch { alert('Invalid JSON — paste the full config object from Firebase.'); }
+};
+
+document.getElementById('setup-local-btn').onclick = () => { hideSetup(); setSync('local'); };
+
+// ── BOOT ──
+// ── BAKED-IN FIREBASE CONFIG ──
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAApCE3uVIQf5oPwox646XPSU_u-rwwjRo",
+  authDomain: "global-strategy-landscape.firebaseapp.com",
+  projectId: "global-strategy-landscape",
+  storageBucket: "global-strategy-landscape.firebasestorage.app",
+  messagingSenderId: "556768288508",
+  appId: "1:556768288508:web:cf7c5d78e3dbf446844179",
+  measurementId: "G-G2EPQG1GGS"
+};
+
+async function boot() {
+  // Use baked-in config directly
+  const ok = await connectFirebase(FIREBASE_CONFIG);
+  if (ok) {
+    renderBoard();
+    hideLoading();
+    return;
+  }
+  // Fall back to local if Firebase fails
+  const local = localStorage.getItem(LOCAL_KEY);
+  if (local) { try { state = JSON.parse(local); } catch {} }
+  setSync('local');
+  renderBoard();
+  hideLoading();
+}
+
+function hideLoading() {
+  const ls = document.getElementById('loading-screen');
+  ls.classList.add('fade');
+  setTimeout(() => ls.style.display='none', 400);
+}
+
+// ── COMMENTS DRAWER ──
 let drawerKey = null;
 const drawerOverlay = document.getElementById('drawer-overlay');
 const drawer = document.getElementById('drawer');
+function commentKey(cat,reg,idx){ return `${cat}|||${reg}|||${idx}`; }
 
-function commentKey(cat, reg, idx) { return `${cat}|||${reg}|||${idx}`; }
-
-function openDrawer(cat, reg, idx, tagText) {
-  drawerKey = commentKey(cat, reg, idx);
-  const ri = state.regions.indexOf(reg);
-  const c = pc(ri);
-  document.getElementById('drawer-label').textContent = `${cat} · ${reg}`;
-  document.getElementById('drawer-label').style.color = c.bd;
-  document.getElementById('drawer-tag-name').textContent = tagText;
-  document.getElementById('drawer-context').textContent = 'Comments';
+function openDrawer(cat,reg,idx,tagText){
+  drawerKey=commentKey(cat,reg,idx);
+  const c=pc(state.regions.indexOf(reg));
+  document.getElementById('drawer-label').textContent=`${cat} · ${reg}`;
+  document.getElementById('drawer-label').style.color=c.bd;
+  document.getElementById('drawer-tag-name').textContent=tagText;
   renderComments();
   drawerOverlay.classList.add('open');
   drawer.classList.add('open');
 }
+function closeDrawer(){ drawerOverlay.classList.remove('open');drawer.classList.remove('open');drawerKey=null; }
+drawerOverlay.onclick=closeDrawer;
+document.getElementById('drawer-close').onclick=closeDrawer;
 
-function closeDrawer() {
-  drawerOverlay.classList.remove('open');
-  drawer.classList.remove('open');
-  drawerKey = null;
-}
-
-drawerOverlay.onclick = closeDrawer;
-document.getElementById('drawer-close').onclick = closeDrawer;
-
-function renderComments() {
-  const body = document.getElementById('drawer-body');
-  const comments = (state.comments[drawerKey] || []);
-  if (!comments.length) {
-    body.innerHTML = '<div class="no-comments">No comments yet.<br>Be the first to add one!</div>';
-    return;
-  }
-  body.innerHTML = comments.map((c, i) => `
+function renderComments(){
+  const body=document.getElementById('drawer-body');
+  const comments=(state.comments?.[drawerKey]||[]);
+  if(!comments.length){ body.innerHTML='<div class="no-comments">No comments yet.<br>Be the first to add one!</div>'; return; }
+  body.innerHTML=comments.map((c,i)=>`
     <div class="comment-item">
       <div class="comment-avatar" style="background:${avatarColor(c.author)}">${initials(c.author)}</div>
       <div class="comment-bubble">
-        <div class="comment-meta">
-          <span class="comment-author">${esc(c.author)}</span>
-          <span class="comment-time">${c.time}</span>
-        </div>
+        <div class="comment-meta"><span class="comment-author">${esc(c.author)}</span><span class="comment-time">${c.time}</span></div>
         <div class="comment-text">${esc(c.text).replace(/\n/g,'<br>')}</div>
-        <button class="comment-del" onclick="deleteComment(${i})" title="Delete">×</button>
+        <button class="comment-del" onclick="window._delComment(${i})">×</button>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
-function initials(name) {
-  if (!name) return '?';
-  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('');
-}
-const avatarColors = ['#1a2b45','#1d7a6b','#5c8a3c','#2a6fa8','#7b4ea0','#c8922a','#3d7d8f','#c0453a'];
-function avatarColor(name) { let h=0; for(let c of (name||'')) h=(h*31+c.charCodeAt(0))&0xffff; return avatarColors[h%avatarColors.length]; }
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function deleteComment(i) {
-  if (!drawerKey) return;
-  if (!state.comments[drawerKey]) return;
-  state.comments[drawerKey].splice(i, 1);
-  if (!state.comments[drawerKey].length) delete state.comments[drawerKey];
+window._delComment = (i) => {
+  if(!drawerKey||!state.comments?.[drawerKey]) return;
+  state.comments[drawerKey].splice(i,1);
+  if(!state.comments[drawerKey].length) delete state.comments[drawerKey];
   save(); renderComments(); renderBoard(); toast('Comment removed');
-}
-
-document.getElementById('comment-submit').onclick = () => {
-  const author = document.getElementById('author-input').value.trim() || 'Anonymous';
-  const text = document.getElementById('comment-textarea').value.trim();
-  if (!text || !drawerKey) return;
-  if (!state.comments[drawerKey]) state.comments[drawerKey] = [];
-  const now = new Date();
-  state.comments[drawerKey].push({ id: Date.now(), author, text, time: now.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) });
-  save(); renderComments(); renderBoard();
-  document.getElementById('comment-textarea').value = '';
-  toast('Comment added ✓');
 };
+document.getElementById('comment-submit').onclick=()=>{
+  const author=document.getElementById('author-input').value.trim()||'Anonymous';
+  const text=document.getElementById('comment-textarea').value.trim();
+  if(!text||!drawerKey) return;
+  if(!state.comments) state.comments={};
+  if(!state.comments[drawerKey]) state.comments[drawerKey]=[];
+  const now=new Date();
+  state.comments[drawerKey].push({author,text,time:now.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})});
+  save(); renderComments(); renderBoard();
+  document.getElementById('comment-textarea').value='';
+  toast('Comment posted ✓');
+};
+document.getElementById('comment-textarea').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))document.getElementById('comment-submit').click();});
 
-document.getElementById('comment-textarea').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) document.getElementById('comment-submit').click();
+// ── DRAG ──
+let drag=null,ghost=null;
+function createGhost(text,color){
+  const g=document.createElement('div');g.id='drag-ghost';
+  g.textContent=text;g.style.borderLeftColor=color.bd;g.style.background=color.bg;g.style.color=color.tx;
+  document.body.appendChild(g);return g;
+}
+function moveGhost(e){if(!ghost)return;ghost.style.left=(e.clientX+14)+'px';ghost.style.top=(e.clientY-16)+'px';}
+document.addEventListener('mousemove',moveGhost);
+document.addEventListener('mouseup',()=>{
+  if(ghost){ghost.remove();ghost=null;}
+  document.querySelectorAll('.td-reg.drag-over').forEach(el=>el.classList.remove('drag-over'));
+  document.querySelectorAll('.tag.dragging').forEach(el=>el.classList.remove('dragging'));
+  drag=null;
 });
 
-// ─── BOARD RENDER ───
-function countComments(cat, reg, idx) {
-  const k = commentKey(cat, reg, idx);
-  return (state.comments[k] || []).length;
-}
+function countComments(cat,reg,idx){ return(state.comments?.[commentKey(cat,reg,idx)]||[]).length; }
 
-// ─── DRAG STATE ───
-let drag = null; // {cat, reg, idx, text, comments}
-let ghost = null;
-
-function createGhost(text, color) {
-  const g = document.createElement('div');
-  g.id = 'drag-ghost';
-  g.textContent = text;
-  g.style.borderLeftColor = color.bd;
-  g.style.background = color.bg;
-  g.style.color = color.tx;
-  document.body.appendChild(g);
-  return g;
-}
-
-function moveGhost(e) {
-  if (!ghost) return;
-  ghost.style.left = (e.clientX + 14) + 'px';
-  ghost.style.top  = (e.clientY - 16) + 'px';
-}
-
-document.addEventListener('mousemove', moveGhost);
-document.addEventListener('mouseup', () => {
-  if (ghost) { ghost.remove(); ghost = null; }
-  document.querySelectorAll('.td-reg.drag-over').forEach(el => el.classList.remove('drag-over'));
-  document.querySelectorAll('.tag.dragging').forEach(el => el.classList.remove('dragging'));
-  drag = null;
-});
-
-function makeTag(cat, reg, idx, text, color) {
-  const cc = countComments(cat, reg, idx);
-  const div = document.createElement('div');
-  div.className = 'tag';
-  div.style.cssText = `background:${color.bg};border-left-color:${color.bd};color:${color.tx}`;
-  div.innerHTML = `
-    <span class="tag-text">${esc(text)}</span>
-    <span class="tag-actions">
-      ${cc > 0 ? `<span class="tag-comment-indicator" style="color:${color.bd}">💬 ${cc}</span>` : ''}
-      <button class="tag-comment-btn" title="Comments" style="color:${color.bd}">💬</button>
-      <button class="tag-del-btn" title="Delete" style="color:${color.bd}">×</button>
-    </span>
-  `;
-
-  // ── drag start ──
-  div.addEventListener('mousedown', (e) => {
-    if (e.target.closest('button')) return; // don't drag when clicking buttons
+function makeTag(cat,reg,idx,text,color){
+  const cc=countComments(cat,reg,idx);
+  const div=document.createElement('div');
+  div.className='tag';
+  div.style.cssText=`background:${color.bg};border-left-color:${color.bd};color:${color.tx}`;
+  div.innerHTML=`<span class="tag-text">${esc(text)}</span><span class="tag-actions">${cc>0?`<span class="tag-comment-indicator" style="color:${color.bd}">💬 ${cc}</span>`:''}<button class="tag-comment-btn" title="Comments" style="color:${color.bd}">💬</button><button class="tag-del-btn" title="Delete" style="color:${color.bd}">×</button></span>`;
+  div.addEventListener('mousedown',(e)=>{
+    if(e.target.closest('button'))return;
     e.preventDefault();
-    drag = { cat, reg, idx, text, comments: state.comments[commentKey(cat, reg, idx)] };
-    ghost = createGhost(text, color);
-    moveGhost(e);
-    div.classList.add('dragging');
+    drag={cat,reg,idx,text,comments:state.comments?.[commentKey(cat,reg,idx)]};
+    ghost=createGhost(text,color);moveGhost(e);div.classList.add('dragging');
   });
-
-  div.querySelector('.tag-comment-btn').onclick = (e) => { e.stopPropagation(); openDrawer(cat, reg, idx, text); };
-  div.querySelector('.tag-del-btn').onclick = (e) => {
+  div.querySelector('.tag-comment-btn').onclick=(e)=>{e.stopPropagation();openDrawer(cat,reg,idx,text);};
+  div.querySelector('.tag-del-btn').onclick=(e)=>{
     e.stopPropagation();
-    confirm('Remove item?', `"${text}" will be deleted permanently.`, () => {
-      const items = (state.data[cat]?.[reg] || []);
-      for (let j = idx + 1; j < items.length; j++) {
-        const oldK = commentKey(cat, reg, j);
-        const newK = commentKey(cat, reg, j - 1);
-        if (state.comments[oldK]) { state.comments[newK] = state.comments[oldK]; delete state.comments[oldK]; }
-      }
-      delete state.comments[commentKey(cat, reg, idx)];
-      if (!state.data[cat]) state.data[cat] = {};
-      if (!state.data[cat][reg]) state.data[cat][reg] = [];
-      state.data[cat][reg].splice(idx, 1);
-      if (!state.data[cat][reg].length) delete state.data[cat][reg];
-      save(); renderBoard(); toast('Removed');
+    confirmDlg('Remove item?',`"${text}" will be deleted permanently.`,()=>{
+      const items=(state.data[cat]?.[reg]||[]);
+      for(let j=idx+1;j<items.length;j++){const ok=commentKey(cat,reg,j),nk=commentKey(cat,reg,j-1);if(state.comments?.[ok]){state.comments[nk]=state.comments[ok];delete state.comments[ok];}}
+      delete state.comments?.[commentKey(cat,reg,idx)];
+      state.data[cat][reg].splice(idx,1);
+      if(!state.data[cat][reg].length)delete state.data[cat][reg];
+      save();renderBoard();toast('Removed');
     });
   };
-  div.onclick = (e) => { if (!e.target.closest('button')) openDrawer(cat, reg, idx, text); };
+  div.onclick=(e)=>{if(!e.target.closest('button'))openDrawer(cat,reg,idx,text);};
   return div;
 }
 
-function makeInlineInput(color, onCommit, existingVal='', isEdit=false) {
-  const inp = document.createElement('input');
-  inp.className = 'inline-input';
-  inp.value = existingVal;
-  inp.placeholder = isEdit ? '' : 'Type, then Enter…';
-  inp.style.cssText = `border-color:${color.bd};color:${color.tx};background:${isEdit?color.bg:'#fff'}`;
-  let committed = false;
-  const commit = () => {
-    if (committed) return; committed = true;
-    onCommit(inp.value.trim());
-  };
-  inp.onblur = commit;
-  inp.onkeydown = (e) => {
-    if (e.key === 'Enter') { e.preventDefault(); commit(); }
-    if (e.key === 'Escape') { committed = true; renderBoard(); }
-  };
-  return inp;
-}
+let editingCell=null,addingCat=false,addingReg=false;
 
-let editingCell = null; // {cat, reg} currently showing input
-
-function makeCell(cat, reg, ri) {
-  const td = document.createElement('td');
-  td.className = 'td-reg';
-  const color = pc(ri);
-  td.style.borderLeftColor = color.bd;
-
-  // ── drop target ──
-  td.addEventListener('mouseover', (e) => {
-    if (!drag) return;
-    if (drag.cat === cat && drag.reg === reg) return; // same cell
-    document.querySelectorAll('.td-reg.drag-over').forEach(el => el.classList.remove('drag-over'));
-    td.classList.add('drag-over');
-  });
-  td.addEventListener('mouseout', () => { td.classList.remove('drag-over'); });
-  td.addEventListener('mouseup', () => {
-    if (!drag) return;
-    if (drag.cat === cat && drag.reg === reg) return;
+function makeCell(cat,reg,ri){
+  const td=document.createElement('td');
+  td.className='td-reg';
+  const color=pc(ri);
+  td.style.borderLeftColor=color.bd;
+  td.addEventListener('mouseover',()=>{if(!drag)return;if(drag.cat===cat&&drag.reg===reg)return;document.querySelectorAll('.td-reg.drag-over').forEach(el=>el.classList.remove('drag-over'));td.classList.add('drag-over');});
+  td.addEventListener('mouseout',()=>td.classList.remove('drag-over'));
+  td.addEventListener('mouseup',()=>{
+    if(!drag||drag.cat===cat&&drag.reg===reg)return;
     td.classList.remove('drag-over');
-    // remove from source
-    const srcItems = state.data[drag.cat]?.[drag.reg] || [];
-    const srcIdx = drag.idx;
-    // shift comments in source
-    for (let j = srcIdx + 1; j < srcItems.length; j++) {
-      const ok = commentKey(drag.cat, drag.reg, j);
-      const nk = commentKey(drag.cat, drag.reg, j - 1);
-      if (state.comments[ok]) { state.comments[nk] = state.comments[ok]; delete state.comments[ok]; }
-    }
-    const oldCmtKey = commentKey(drag.cat, drag.reg, srcIdx);
-    const savedComments = drag.comments;
-    delete state.comments[oldCmtKey];
-    state.data[drag.cat][drag.reg].splice(srcIdx, 1);
-    if (!state.data[drag.cat][drag.reg].length) delete state.data[drag.cat][drag.reg];
-    // add to target
-    if (!state.data[cat]) state.data[cat] = {};
-    if (!state.data[cat][reg]) state.data[cat][reg] = [];
+    const srcItems=state.data[drag.cat]?.[drag.reg]||[];
+    const srcIdx=drag.idx;
+    for(let j=srcIdx+1;j<srcItems.length;j++){const ok=commentKey(drag.cat,drag.reg,j),nk=commentKey(drag.cat,drag.reg,j-1);if(state.comments?.[ok]){if(!state.comments)state.comments={};state.comments[nk]=state.comments[ok];delete state.comments[ok];}}
+    const savedCmt=drag.comments;
+    if(state.comments) delete state.comments[commentKey(drag.cat,drag.reg,srcIdx)];
+    state.data[drag.cat][drag.reg].splice(srcIdx,1);
+    if(!state.data[drag.cat][drag.reg].length)delete state.data[drag.cat][drag.reg];
+    if(!state.data[cat])state.data[cat]={};
+    if(!state.data[cat][reg])state.data[cat][reg]=[];
     state.data[cat][reg].push(drag.text);
-    const newIdx = state.data[cat][reg].length - 1;
-    if (savedComments) state.comments[commentKey(cat, reg, newIdx)] = savedComments;
-    save(); renderBoard(); toast('Moved ✓');
-    drag = null;
+    const newIdx=state.data[cat][reg].length-1;
+    if(savedCmt){if(!state.comments)state.comments={};state.comments[commentKey(cat,reg,newIdx)]=savedCmt;}
+    save();renderBoard();toast('Moved ✓');drag=null;
   });
-
-  const items = (state.data[cat]?.[reg] || []);
-
-  items.forEach((text, idx) => {
-    td.appendChild(makeTag(cat, reg, idx, text, color));
-  });
-
-  // add input if this cell is active
-  if (editingCell && editingCell.cat === cat && editingCell.reg === reg) {
-    const inp = makeInlineInput(color, (val) => {
-      editingCell = null;
-      if (val) {
-        if (!state.data[cat]) state.data[cat] = {};
-        if (!state.data[cat][reg]) state.data[cat][reg] = [];
-        state.data[cat][reg].push(val);
-        save(); toast('Saved ✓');
-      }
-      renderBoard();
-    });
-    td.appendChild(inp);
-    setTimeout(() => inp.focus(), 20);
+  (state.data[cat]?.[reg]||[]).forEach((text,idx)=>td.appendChild(makeTag(cat,reg,idx,text,color)));
+  if(editingCell&&editingCell.cat===cat&&editingCell.reg===reg){
+    const inp=document.createElement('input');
+    inp.className='inline-input';inp.placeholder='Type, then Enter…';
+    inp.style.cssText=`border-color:${color.bd};color:${color.tx};background:#fff`;
+    let committed=false;
+    const commit=()=>{if(committed)return;committed=true;const v=inp.value.trim();editingCell=null;if(v){if(!state.data[cat])state.data[cat]={};if(!state.data[cat][reg])state.data[cat][reg]=[];state.data[cat][reg].push(v);save();toast('Saved ✓');}renderBoard();};
+    inp.onblur=commit;inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();commit();}if(e.key==='Escape'){committed=true;editingCell=null;renderBoard();}};
+    td.appendChild(inp);setTimeout(()=>inp.focus(),20);
   } else {
-    const hint = document.createElement('div');
-    hint.className = 'add-hint';
-    hint.textContent = '+ add item';
-    td.appendChild(hint);
-    td.onclick = (e) => {
-      if (e.target.closest('.tag')) return;
-      editingCell = { cat, reg };
-      renderBoard();
-    };
+    const hint=document.createElement('div');hint.className='add-hint';hint.textContent='+ add item';td.appendChild(hint);
+    td.onclick=e=>{if(e.target.closest('.tag'))return;editingCell={cat,reg};renderBoard();};
   }
-
   return td;
 }
 
-let addingCat = false;
-let addingReg = false;
-
-function renderLegend() {
-  const el = document.getElementById('legend');
-  el.innerHTML = '';
-  state.regions.forEach((r, i) => {
-    const c = pc(i);
-    el.innerHTML += `<div class="legend-item" style="color:${c.tx}"><div class="legend-dot" style="background:${c.bd}"></div>${esc(r)}</div>`;
-  });
+function renderLegend(){
+  document.getElementById('legend').innerHTML=state.regions.map((r,i)=>`<div class="legend-item" style="color:${pc(i).tx}"><div class="legend-dot" style="background:${pc(i).bd}"></div>${esc(r)}</div>`).join('');
 }
 
-function renderBoard() {
+function renderBoard(){
   renderLegend();
-  const table = document.getElementById('board-table');
-  table.innerHTML = '';
-
-  // ── THEAD ──
-  const thead = document.createElement('thead');
-  const hr = document.createElement('tr');
-
-  const thCat = document.createElement('th');
-  thCat.className = 'th-cat';
-  thCat.textContent = 'Category';
-  hr.appendChild(thCat);
-
-  state.regions.forEach((r, i) => {
-    const c = pc(i);
-    const th = document.createElement('th');
-    th.className = 'th-reg';
-    th.style.cssText = `background:${c.bg};color:${c.bd};border-left-color:${c.bd}`;
-    th.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px"><span>${esc(r)}</span>${state.regions.length>1?`<button class="del-reg-btn" style="color:${c.bd}" title="Remove ${r}">×</button>`:''}</div>`;
-    if (state.regions.length > 1) {
-      th.querySelector('.del-reg-btn').onclick = () => confirm(`Remove region "${r}"?`, 'This column and all its items will be deleted.', () => {
-        const nd = JSON.parse(JSON.stringify(state.data));
-        Object.keys(nd).forEach(cat => { if (nd[cat][r]) delete nd[cat][r]; });
-        state.data = nd;
-        state.regions = state.regions.filter(x => x !== r);
-        save(); renderBoard(); toast('Region removed');
-      });
-    }
+  const table=document.getElementById('board-table');
+  table.innerHTML='';
+  const thead=document.createElement('thead');
+  const hr=document.createElement('tr');
+  const thCat=document.createElement('th');thCat.className='th-cat';thCat.textContent='Category';hr.appendChild(thCat);
+  state.regions.forEach((r,i)=>{
+    const c=pc(i);
+    const th=document.createElement('th');th.className='th-reg';
+    th.style.cssText=`background:${c.bg};color:${c.bd};border-left-color:${c.bd}`;
+    th.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:6px"><span>${esc(r)}</span>${state.regions.length>1?`<button class="del-reg-btn" style="color:${c.bd}">×</button>`:''}</div>`;
+    if(state.regions.length>1) th.querySelector('.del-reg-btn').onclick=()=>confirmDlg(`Remove region "${r}"?`,'This column and all its items will be deleted.',()=>{Object.keys(state.data).forEach(cat=>{if(state.data[cat][r])delete state.data[cat][r];});state.regions=state.regions.filter(x=>x!==r);save();renderBoard();toast('Region removed');});
     hr.appendChild(th);
   });
-
-  // add region col header
-  const thAdd = document.createElement('th');
-  thAdd.className = 'add-reg-th';
-  if (addingReg) {
-    const inp = document.createElement('input');
-    inp.className = 'inline-input';
-    inp.placeholder = 'Region name…';
-    inp.style.cssText = 'border-color:var(--teal);width:130px';
-    let done = false;
-    const commit = () => {
-      if (done) return; done = true;
-      const v = inp.value.trim();
-      addingReg = false;
-      if (v && !state.regions.includes(v)) { state.regions.push(v); save(); toast('Region added ✓'); }
-      renderBoard();
-    };
-    inp.onblur = commit;
-    inp.onkeydown = e => { if (e.key==='Enter'){e.preventDefault();commit();} if(e.key==='Escape'){done=true;addingReg=false;renderBoard();} };
-    thAdd.appendChild(inp);
-    setTimeout(() => inp.focus(), 20);
+  const thAdd=document.createElement('th');thAdd.className='add-reg-th';
+  if(addingReg){
+    const inp=document.createElement('input');inp.className='inline-input';inp.placeholder='Region name…';inp.style.cssText='border-color:var(--teal);width:120px';
+    let done=false;const commit=()=>{if(done)return;done=true;const v=inp.value.trim();addingReg=false;if(v&&!state.regions.includes(v)){state.regions.push(v);save();toast('Region added ✓');}renderBoard();};
+    inp.onblur=commit;inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();commit();}if(e.key==='Escape'){done=true;addingReg=false;renderBoard();}};
+    thAdd.appendChild(inp);setTimeout(()=>inp.focus(),20);
   } else {
-    const btn = document.createElement('button');
-    btn.className = 'add-col-btn';
-    btn.innerHTML = '<span style="font-size:15px;line-height:1">+</span> Add region';
-    btn.onclick = () => { addingReg = true; renderBoard(); };
-    thAdd.appendChild(btn);
+    const btn=document.createElement('button');btn.className='add-col-btn';btn.innerHTML='<span style="font-size:15px;line-height:1">+</span> Add region';btn.onclick=()=>{addingReg=true;renderBoard();};thAdd.appendChild(btn);
   }
-  hr.appendChild(thAdd);
-  thead.appendChild(hr);
-  table.appendChild(thead);
+  hr.appendChild(thAdd);thead.appendChild(hr);table.appendChild(thead);
 
-  // ── TBODY ──
-  const tbody = document.createElement('tbody');
-
-  state.categories.forEach((cat) => {
-    const tr = document.createElement('tr');
-
-    // cat label
-    const tdCat = document.createElement('td');
-    tdCat.className = 'td-cat';
-    tdCat.innerHTML = `${esc(cat)}${state.categories.length>1?`<button class="del-cat-btn" title="Remove">×</button>`:''}`;
-    if (state.categories.length > 1) {
-      tdCat.querySelector('.del-cat-btn').onclick = () => confirm(`Remove category "${cat}"?`, 'This row and all its items will be deleted.', () => {
-        const nd = JSON.parse(JSON.stringify(state.data));
-        delete nd[cat];
-        state.data = nd;
-        state.categories = state.categories.filter(c => c !== cat);
-        save(); renderBoard(); toast('Category removed');
-      });
-    }
+  const tbody=document.createElement('tbody');
+  state.categories.forEach((cat)=>{
+    const tr=document.createElement('tr');
+    const tdCat=document.createElement('td');tdCat.className='td-cat';
+    tdCat.innerHTML=`${esc(cat)}${state.categories.length>1?'<button class="del-cat-btn">×</button>':''}`;
+    if(state.categories.length>1) tdCat.querySelector('.del-cat-btn').onclick=()=>confirmDlg(`Remove category "${cat}"?`,'This row and all its items will be deleted.',()=>{delete state.data[cat];state.categories=state.categories.filter(c=>c!==cat);save();renderBoard();toast('Category removed');});
     tr.appendChild(tdCat);
-
-    state.regions.forEach((reg, ri) => tr.appendChild(makeCell(cat, reg, ri)));
-
-    const tdSpacer = document.createElement('td');
-    tdSpacer.className = 'td-spacer';
-    tr.appendChild(tdSpacer);
+    state.regions.forEach((reg,ri)=>tr.appendChild(makeCell(cat,reg,ri)));
+    const tdS=document.createElement('td');tdS.className='td-spacer';tr.appendChild(tdS);
     tbody.appendChild(tr);
   });
 
-  // ── ADD CATEGORY ROW ──
-  const addTr = document.createElement('tr');
-  const addTdCat = document.createElement('td');
-  addTdCat.className = 'td-cat add-row-td';
-  if (addingCat) {
-    const inp = document.createElement('input');
-    inp.className = 'inline-input';
-    inp.placeholder = 'Category name…';
-    inp.style.cssText = 'border-color:var(--teal);background:rgba(255,255,255,0.12);color:#fff;width:100%';
-    let done = false;
-    const commit = () => {
-      if (done) return; done = true;
-      const v = inp.value.trim();
-      addingCat = false;
-      if (v && !state.categories.includes(v)) {
-        state.categories.push(v);
-        if (!state.data[v]) state.data[v] = {};
-        save(); toast('Category added ✓');
-      }
-      renderBoard();
-    };
-    inp.onblur = commit;
-    inp.onkeydown = e => { if (e.key==='Enter'){e.preventDefault();commit();} if(e.key==='Escape'){done=true;addingCat=false;renderBoard();} };
-    addTdCat.appendChild(inp);
-    setTimeout(() => inp.focus(), 20);
+  // Add category row
+  const addTr=document.createElement('tr');
+  const addTdCat=document.createElement('td');addTdCat.className='td-cat add-row-td';
+  if(addingCat){
+    const inp=document.createElement('input');inp.className='inline-input';inp.placeholder='Category name…';inp.style.cssText='border-color:var(--teal);background:rgba(255,255,255,0.12);color:#fff;width:100%';
+    let done=false;const commit=()=>{if(done)return;done=true;const v=inp.value.trim();addingCat=false;if(v&&!state.categories.includes(v)){state.categories.push(v);if(!state.data[v])state.data[v]={};save();toast('Category added ✓');}renderBoard();};
+    inp.onblur=commit;inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();commit();}if(e.key==='Escape'){done=true;addingCat=false;renderBoard();}};
+    addTdCat.appendChild(inp);setTimeout(()=>inp.focus(),20);
   } else {
-    const btn = document.createElement('button');
-    btn.className = 'add-row-btn';
-    btn.innerHTML = '<span style="font-size:15px;line-height:1">+</span> Add category';
-    btn.onclick = () => { addingCat = true; renderBoard(); };
-    addTdCat.appendChild(btn);
+    const btn=document.createElement('button');btn.className='add-row-btn';btn.innerHTML='<span style="font-size:15px;line-height:1">+</span> Add category';btn.onclick=()=>{addingCat=true;renderBoard();};addTdCat.appendChild(btn);
   }
   addTr.appendChild(addTdCat);
-  state.regions.forEach(() => {
-    const td = document.createElement('td');
-    td.className = 'add-row-td';
-    addTr.appendChild(td);
-  });
-  const tdS2 = document.createElement('td');
-  tdS2.className = 'add-row-td td-spacer';
-  addTr.appendChild(tdS2);
+  state.regions.forEach(()=>{const td=document.createElement('td');td.className='add-row-td';addTr.appendChild(td);});
+  const tdS2=document.createElement('td');tdS2.className='add-row-td td-spacer';addTr.appendChild(tdS2);
   tbody.appendChild(addTr);
-
   table.appendChild(tbody);
 }
 
-renderBoard();
+boot();
 </script>
 </body>
 </html>
