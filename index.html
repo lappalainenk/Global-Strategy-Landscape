@@ -716,9 +716,11 @@ const INQ_SEED = {
 
 function getSubState(stateKey) {
   if (!state[stateKey]) {
-    const baseRegions = state.regions ? state.regions.filter(r => r !== 'All') : ['Africa','APAC','Europe','LATAM','MENA','North Am'];
-    const seedData = stateKey === 'inq' ? JSON.parse(JSON.stringify(INQ_SEED)) : {};
-    state[stateKey] = { regions: [...baseRegions], data: seedData };
+const baseRegions = state.regions
+  ? (stateKey === 'pxe2' ? state.regions.filter(r => r !== 'All') : [...state.regions])
+  : ['All','Africa','APAC','Europe','LATAM','MENA','North Am'];
+const seedData = stateKey === 'inq' ? JSON.parse(JSON.stringify(INQ_SEED)) : {};
+state[stateKey] = { regions: [...baseRegions], data: seedData };
   }
   return state[stateKey];
 }
